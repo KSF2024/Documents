@@ -7,6 +7,7 @@ API機能No. | 種別 | API名 | 機能概要
 -|-|-|-
 FIREWORKS-000|API|[fireworks](#fireworks)|花火データの送受信
 PROFILES-000|API|[profiles](#profiles)|ユーザーデータの送受信
+LOTTERY-000|API|[lottery](#lottery)|当選者ユーザーの抽選
 
 ### fireworks
 API機能No. | FIREWORKS-000
@@ -115,5 +116,24 @@ METHOD | GET, POST
         age: number; // 年齢
         schoolName: string; // 学校名
         schoolGrade: number; // 学年
+    };
+    ```
+
+### lottery
+API機能No. | LOTTERY-000
+-|-
+API名 | lottery
+概要 | 当選者ユーザーの抽選
+METHOD | GET
+
+#### lottery GET
+##### ユーザー抽選
+- 概要: 非当選者の中から1人、ユーザーのデータを取得する。取得されたユーザーは当選者扱いになる。
+    - `isWinner`が`false`のユーザーをランダムに1人取得し、取得したユーザーの`isWinner`を`true`にする。
+- アクセスURL: `api/v1/lottery`
+- 取得データ
+    ```ts
+    {
+        [userId: string]: userName: string; // ユーザーID: ユーザー名
     };
     ```
