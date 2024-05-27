@@ -1,6 +1,6 @@
 # HANABINOVATION API設計書
 APIの構築にはAWS LambdaとAPI Gatewayを使用する。
-APIにアクセスするURLは`https://${ドメイン名}/api/${API名}`。
+APIにアクセスするURLは`https://${ドメイン名}/api/v1/${API名}`。
 
 ## API一覧
 API機能No. | 種別 | API名 | 機能概要
@@ -13,7 +13,7 @@ API機能No. | FIREWORKS-000
 -|-
 API名 | fireworks
 概要 | 花火データの送受信
-METHOD | GET or POST
+METHOD | GET, POST
 
 #### fireworks GET
 クエリ名 | 指定する型 | 指定する値 | クエリ概要
@@ -23,7 +23,7 @@ createdAfter | ISO 8601 | 特定の日時 | 特定の日時移行のデータに
 
 ##### 全データ取得
 - 概要: 全ユーザーの花火データを取得する。
-- アクセスURL: `api/fireworks`
+- アクセスURL: `api/v1/fireworks`
 - 取得データ
     ```ts
     {
@@ -40,7 +40,7 @@ createdAfter | ISO 8601 | 特定の日時 | 特定の日時移行のデータに
 
 ##### ユーザーデータ取得
 - 概要: 特定のユーザーの作成した、全ての花火のデータを取得する。
-- アクセスURL: `api/fireworks/${userId}`
+- アクセスURL: `api/v1/fireworks/${userId}`
 - 取得データ
     ```ts
     {
@@ -55,7 +55,7 @@ createdAfter | ISO 8601 | 特定の日時 | 特定の日時移行のデータに
 
 ##### ブースデータ取得
 - 概要: 特定のユーザーが、特定のブースで作成した花火のデータを1つ取得する。
-- アクセスURL: `api/fireworks/${userId}/${boothId}`
+- アクセスURL: `api/v1/fireworks/${userId}/${boothId}`
 - 取得データ
     ```ts
     {
@@ -69,7 +69,7 @@ createdAfter | ISO 8601 | 特定の日時 | 特定の日時移行のデータに
 #### fireworks POST
 ##### 花火データ登録
 - 概要: 特定のブースで作成した花火のデータを登録する。
-- アクセスURL: `api/fireworks`
+- アクセスURL: `api/v1/fireworks`
 - 送信データ
     ```ts
     {
@@ -88,12 +88,12 @@ API機能No. | PROFILES-000
 -|-
 API名 | profiles
 概要 | ユーザーデータの送受信
-METHOD | GET or POST
+METHOD | GET, POST
 
 #### profiles GET
 ##### 全データ取得
 - 概要: 全ユーザーのデータを取得する。
-- アクセスURL: `api/profiles`
+- アクセスURL: `api/v1/profiles`
 - 取得データ
     ```ts
     {
@@ -104,7 +104,7 @@ METHOD | GET or POST
 #### profiles POST
 ##### ユーザーデータ登録
 - 概要: ユーザーデータを登録する。
-- アクセスURL: `api/profiles`
+- アクセスURL: `api/v1/profiles`
 - 送信データ
     ```ts
     {
