@@ -92,13 +92,23 @@ API名 | profiles
 METHOD | GET, POST
 
 #### profiles GET
-##### 全データ取得
-- 概要: 全ユーザーのデータを取得する。
-- アクセスURL: `api/v1/profiles`
+##### 受付番号全取得
+- 概要: 全ユーザーの受付番号を取得する。
+- アクセスURL: `api/v1/profiles/receipt`
 - 取得データ
     ```ts
     {
-        [userId: string]: userName: string; // ユーザーID: ユーザー名
+        [receipt: string]: userName: string; // ユーザーID: ユーザー名
+    };
+    ```
+
+##### 受付番号個別取得
+- 概要: 指定したユーザーの受付番号を取得する。
+- アクセスURL: `api/v1/profiles/receipt/${userId}`
+- 取得データ
+    ```ts
+    {
+        [receipt: string]: userName: string; // ユーザーID: ユーザー名
     };
     ```
 
@@ -124,16 +134,27 @@ API機能No. | LOTTERY-000
 -|-
 API名 | lottery
 概要 | 当選者ユーザーの抽選
-METHOD | GET
+METHOD | GET, POST
 
 #### lottery GET
 ##### ユーザー抽選
-- 概要: 非当選者の中から1人、ユーザーのデータを取得する。取得されたユーザーは当選者扱いになる。
-    - `isWinner`が`false`のユーザーをランダムに1人取得し、取得したユーザーの`isWinner`を`true`にする。
+- 概要: 非当選者の中から1人、ユーザーのデータを取得する。
 - アクセスURL: `api/v1/lottery`
 - 取得データ
     ```ts
     {
         [userId: string]: userName: string; // ユーザーID: ユーザー名
+    };
+    ```
+
+#### lottery POST
+##### 当選ユーザー登録
+- 概要: 指定したユーザーを当選者扱いにする。
+    - 指定したユーザーの`isWinner`を`true`にする。
+- アクセスURL: `api/v1/lottery`
+- 送信データ
+    ```ts
+    {
+        userId: string; // ユーザーID
     };
     ```
