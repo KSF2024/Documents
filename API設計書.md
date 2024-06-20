@@ -98,7 +98,7 @@ METHOD | GET, POST
 - 取得データ
     ```ts
     {
-        [receipt: string]: userName: string; // ユーザーID: ユーザー名
+        [receipt: string]: userName: string; // 受付番号: ユーザー名
     };
     ```
 
@@ -115,6 +115,8 @@ METHOD | GET, POST
 #### profiles POST
 ##### ユーザーデータ登録
 - 概要: ユーザーデータを登録する。
+    - ユーザーデータが登録されたユーザーには、受付番号`receipt`が発行されデータ登録が行われる。
+        その後、「当選者ユーザーの抽選」において、抽選可能なユーザーとして扱われる。
 - アクセスURL: `api/v1/profiles`
 - 送信データ
     ```ts

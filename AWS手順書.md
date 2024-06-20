@@ -30,6 +30,11 @@
     serverless deploy
     ```
 
+- 後程必要になるので`aws-sdk`もインストールします
+    ```
+    npm install @aws-sdk/client-dynamodb
+    ```
+
 ### serverless.ymlの設定
 ```yaml
 service: hanabinovation
