@@ -6,8 +6,9 @@ APIにアクセスするURLは`https://${ドメイン名}/api/v1/${API名}`。
 API機能No. | 種別 | API名 | 機能概要
 -|-|-|-
 FIREWORKS-000|API|[fireworks](#fireworks)|花火データの送受信
-PROFILES-000|API|[profiles](#profiles)|ユーザーデータの送受信
+PROFILES-000|API|[profiles](#profiles)|ユーザーデータの送信
 LOTTERY-000|API|[lottery](#lottery)|当選者ユーザーの抽選
+SEND_FIREWORKS-000|API|[sendFireworks](#sendFireworks)|花火データの一括送信
 
 ### fireworks
 API機能No. | FIREWORKS-000
@@ -88,29 +89,8 @@ createdAfter | ISO 8601 | 特定の日時 | 特定の日時移行のデータに
 API機能No. | PROFILES-000
 -|-
 API名 | profiles
-概要 | ユーザーデータの送受信
-METHOD | GET, POST
-
-#### profiles GET
-##### 受付番号全取得
-- 概要: 全ユーザーの受付番号を取得する。
-- アクセスURL: `api/v1/profiles/receipt`
-- 取得データ
-    ```ts
-    {
-        [receipt: string]: userName: string; // 受付番号: ユーザー名
-    };
-    ```
-
-##### 受付番号個別取得
-- 概要: 指定したユーザーの受付番号を取得する。
-- アクセスURL: `api/v1/profiles/receipt/${userId}`
-- 取得データ
-    ```ts
-    {
-        [receipt: string]: userName: string; // ユーザーID: ユーザー名
-    };
-    ```
+概要 | ユーザーデータの送信
+METHOD | POST
 
 #### profiles POST
 ##### ユーザーデータ登録
@@ -145,18 +125,94 @@ METHOD | GET, POST
 - 取得データ
     ```ts
     {
-        [userId: string]: userName: string; // ユーザーID: ユーザー名
+        [receipt: string]: userName: string; // 受付番号: ユーザー名
     };
     ```
 
 #### lottery POST
 ##### 当選ユーザー登録
 - 概要: 指定したユーザーを当選者扱いにする。
-    - 指定したユーザーの`isWinner`を`true`にする。
+    - 受信した受付番号`receipt`が合致するユーザーの`isWinner`を`true`にする。
 - アクセスURL: `api/v1/lottery`
 - 送信データ
     ```ts
     {
+        receipt: string; // 受付番号
+    };
+    ```
+
+### sendFireworks
+API機能No. | SEND_FIREWORKS-000
+-|-
+API名 | sendFireworks
+概要 | 花火データの一括送信
+METHOD | POST
+
+#### sendFireworks POST
+##### 花火データの一括送信
+- 概要: 指定したユーザーの登録済みの花火データを、websocketで一斉送信する
+    - ユーザーIDでユーザーを指定し、POSTする部分のみこのAPIで行う
+    - ユーザーIDを元にそのユーザーが登録した花火データを取得し、websocketで一斉送信する部分は「`receive-firework`」を参照
+- アクセスURL: `api/v1/sendFireworks`
+- 取得データ
+    ```ts
+    {
         userId: string; // ユーザーID
+    };
+    ```
+
+
+### websocket
+websocketの送信設計を以下に示す。
+
+#### firework-show
+- 概要: 登録があった花火のデータをwebsocketで送信する
+    - `api/v1/fireworks`に花火データがPOSTされた際、そのデータをwebsocketで送信する。
+- 送信データ
+    ```ts
+    {
+        messageType: "firework-show";
+        boothId: string; // 各ブースのID
+        fireworksData: {
+            fireworkType: number; // 花火のセットアップの種類(0の場合はオリジナルデザインを使用)
+            fireworkDesign: Blob; // ユーザーが作成した花火のオリジナルデザイン
+            sparksType: number; // 火花のセットアップの種類
+        };
+    };
+    ```
+
+#### receive-firework
+- 概要: 特定のユーザーが登録した全ての花火をwebsocketで送信する
+    - `api/v1/sendFireworks`にユーザーIDがPOSTされた際、そのユーザーが登録した全ての花火データをwebsocketで送信する。
+- 送信データ
+    ```ts
+    {
+        messageType: "receive-firework";
+        fireworksData: {
+            [boothId: string] : { // 各ブースのID
+                fireworkType: number; // 花火のセットアップの種類(0の場合はオリジナルデザインを使用)
+                fireworkDesign: Blob; // ユーザーが作成した花火のオリジナルデザイン
+                sparksType: number; // 火花のセットアップの種類
+            };
+        };
+    };
+    ```
+
+#### lottery-draw
+- 概要: 特定のユーザーが登録した全ての花火と応募受付情報をwebsocketで送信する
+    - `api/v1/lottery`に当選確定者のユーザーIDがPOSTされた際、そのユーザーが登録した全ての花火データと応募受付情報をwebsocketで送信する。
+- 送信データ
+    ```ts
+    {
+        messageType: "lottery-draw";
+        userName: string; // ユーザー名
+        receipt: string; // 受付番号
+        fireworksData: {
+            [boothId: string] : { // 各ブースのID
+                fireworkType: number; // 花火のセットアップの種類(0の場合はオリジナルデザインを使用)
+                fireworkDesign: Blob; // ユーザーが作成した花火のオリジナルデザイン
+                sparksType: number; // 火花のセットアップの種類
+            };
+        };
     };
     ```
