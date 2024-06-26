@@ -20,7 +20,7 @@ METHOD | GET, POST
 #### fireworks GET
 クエリ名 | 指定する型 | 指定する値 | クエリ概要
 -|-|-|-
-createdAfter | ISO 8601 | 特定の日時 | 特定の日時移行のデータに絞ってデータを取得する
+createdAfter | ISO 8601 | 特定の日時 | 特定の日時以降のデータに絞ってデータを取得する
 
 
 ##### 全データ取得
@@ -90,7 +90,19 @@ API機能No. | PROFILES-000
 -|-
 API名 | profiles
 概要 | ユーザーデータの送信
-METHOD | POST
+METHOD | GET, POST
+
+#### profiles GET
+##### 受付番号取得
+- 概要: 受付番号を取得する。
+- アクセスURL: `api/v1/profiles/${userId}`
+- 送信データ
+    ```ts
+    {
+        receipt: string; // 受付番号
+        userName: string; // ユーザー名
+    };
+    ```
 
 #### profiles POST
 ##### ユーザーデータ登録
@@ -171,12 +183,14 @@ websocketの送信設計を以下に示す。
 - 送信データ
     ```ts
     {
-        messageType: "firework-show";
-        boothId: string; // 各ブースのID
-        fireworksData: {
-            fireworkType: number; // 花火のセットアップの種類(0の場合はオリジナルデザインを使用)
-            fireworkDesign: Blob; // ユーザーが作成した花火のオリジナルデザイン
-            sparksType: number; // 火花のセットアップの種類
+        action: "firework-show";
+        data: {
+            boothId: string; // 各ブースのID
+            fireworksData: {
+                fireworkType: number; // 花火のセットアップの種類(0の場合はオリジナルデザインを使用)
+                fireworkDesign: Blob; // ユーザーが作成した花火のオリジナルデザイン
+                sparksType: number; // 火花のセットアップの種類
+            };
         };
     };
     ```
@@ -187,12 +201,14 @@ websocketの送信設計を以下に示す。
 - 送信データ
     ```ts
     {
-        messageType: "receive-firework";
-        fireworksData: {
-            [boothId: string] : { // 各ブースのID
-                fireworkType: number; // 花火のセットアップの種類(0の場合はオリジナルデザインを使用)
-                fireworkDesign: Blob; // ユーザーが作成した花火のオリジナルデザイン
-                sparksType: number; // 火花のセットアップの種類
+        action: "receive-firework";
+        data: {
+            fireworksData: {
+                [boothId: string] : { // 各ブースのID
+                    fireworkType: number; // 花火のセットアップの種類(0の場合はオリジナルデザインを使用)
+                    fireworkDesign: Blob; // ユーザーが作成した花火のオリジナルデザイン
+                    sparksType: number; // 火花のセットアップの種類
+                };
             };
         };
     };
@@ -204,14 +220,16 @@ websocketの送信設計を以下に示す。
 - 送信データ
     ```ts
     {
-        messageType: "lottery-draw";
-        userName: string; // ユーザー名
-        receipt: string; // 受付番号
-        fireworksData: {
-            [boothId: string] : { // 各ブースのID
-                fireworkType: number; // 花火のセットアップの種類(0の場合はオリジナルデザインを使用)
-                fireworkDesign: Blob; // ユーザーが作成した花火のオリジナルデザイン
-                sparksType: number; // 火花のセットアップの種類
+        action: "lottery-draw";
+        data: {
+            userName: string; // ユーザー名
+            receipt: string; // 受付番号
+            fireworksData: {
+                [boothId: string] : { // 各ブースのID
+                    fireworkType: number; // 花火のセットアップの種類(0の場合はオリジナルデザインを使用)
+                    fireworkDesign: Blob; // ユーザーが作成した花火のオリジナルデザイン
+                    sparksType: number; // 火花のセットアップの種類
+                };
             };
         };
     };
