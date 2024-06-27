@@ -177,13 +177,13 @@ METHOD | POST
 ### websocket
 websocketの送信設計を以下に示す。
 
-#### firework-show
+#### post-firework
 - 概要: 登録があった花火のデータをwebsocketで送信する
     - `api/v1/fireworks`に花火データがPOSTされた際、そのデータをwebsocketで送信する。
 - 送信データ
     ```ts
     {
-        action: "firework-show";
+        action: "post-firework";
         data: {
             boothId: string; // 各ブースのID
             fireworksData: {
@@ -195,13 +195,13 @@ websocketの送信設計を以下に示す。
     };
     ```
 
-#### receive-firework
+#### send-fireworks
 - 概要: 特定のユーザーが登録した全ての花火をwebsocketで送信する
     - `api/v1/sendFireworks`にユーザーIDがPOSTされた際、そのユーザーが登録した全ての花火データをwebsocketで送信する。
 - 送信データ
     ```ts
     {
-        action: "receive-firework";
+        action: "send-fireworks";
         data: {
             fireworksData: {
                 [boothId: string] : { // 各ブースのID
@@ -214,13 +214,13 @@ websocketの送信設計を以下に示す。
     };
     ```
 
-#### lottery-draw
+#### draw-lottery
 - 概要: 特定のユーザーが登録した全ての花火と応募受付情報をwebsocketで送信する
     - `api/v1/lottery`に当選確定者のユーザーIDがPOSTされた際、そのユーザーが登録した全ての花火データと応募受付情報をwebsocketで送信する。
 - 送信データ
     ```ts
     {
-        action: "lottery-draw";
+        action: "draw-lottery";
         data: {
             userName: string; // ユーザー名
             receipt: string; // 受付番号
