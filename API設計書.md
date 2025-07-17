@@ -79,7 +79,7 @@ createdAfter | ISO 8601 | 特定の日時 | 特定の日時以降のデータに
         boothId: string; // 各ブースのID
         fireworksData: {
             fireworkType: number; // 花火のセットアップの種類(0の場合はオリジナルデザインを使用)
-            fireworkDesign: Blob; // ユーザーが作成した花火のオリジナルデザイン
+            fireworkDesign: string; // ユーザーが作成した花火のオリジナルデザイン(base64)
             sparksType: number; // 火花のセットアップの種類
         };
     };
@@ -188,7 +188,7 @@ websocketの送信設計を以下に示す。
             boothId: string; // 各ブースのID
             fireworksData: {
                 fireworkType: number; // 花火のセットアップの種類(0の場合はオリジナルデザインを使用)
-                fireworkDesign: Blob; // ユーザーが作成した花火のオリジナルデザイン
+                fireworkDesign: string; // ユーザーが作成した花火のオリジナルデザイン
                 sparksType: number; // 火花のセットアップの種類
             };
         };
@@ -206,7 +206,7 @@ websocketの送信設計を以下に示す。
             fireworksData: {
                 [boothId: string] : { // 各ブースのID
                     fireworkType: number; // 花火のセットアップの種類(0の場合はオリジナルデザインを使用)
-                    fireworkDesign: Blob; // ユーザーが作成した花火のオリジナルデザイン
+                    fireworkDesign: string; // ユーザーが作成した花火のオリジナルデザイン
                     sparksType: number; // 火花のセットアップの種類
                 };
             };
@@ -227,7 +227,7 @@ websocketの送信設計を以下に示す。
             fireworksData: {
                 [boothId: string] : { // 各ブースのID
                     fireworkType: number; // 花火のセットアップの種類(0の場合はオリジナルデザインを使用)
-                    fireworkDesign: Blob; // ユーザーが作成した花火のオリジナルデザイン
+                    fireworkDesign: string; // ユーザーが作成した花火のオリジナルデザイン
                     sparksType: number; // 火花のセットアップの種類
                 };
             };
