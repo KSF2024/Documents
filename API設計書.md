@@ -177,13 +177,13 @@ METHOD | POST
 ### websocket
 websocketの送信設計を以下に示す。
 
-#### post-firework
+#### show-firework
 - 概要: 登録があった花火のデータをwebsocketで送信する
     - `api/v1/fireworks`に花火データがPOSTされた際、そのデータをwebsocketで送信する。
 - 送信データ
     ```ts
     {
-        action: "post-firework";
+        action: "show-firework";
         data: {
             boothId: string; // 各ブースのID
             fireworksData: {
